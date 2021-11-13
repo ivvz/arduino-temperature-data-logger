@@ -3,7 +3,7 @@
 
 #include "max6675.h"
 
-int thermoDO = 4;
+int thermoDO = 7;
 int thermoCS = 5;
 int thermoCLK = 6;
 
@@ -18,11 +18,11 @@ void setup() {
 }
 
 void loop() {
-  // basic readout test, just print the current temp
-  
+ readTemperature();
+}
+
+void readTemperature(){
    Serial.print("C = "); 
    Serial.println(thermocouple.readCelsius());
-    
-   // For the MAX6675 to update, you must delay AT LEAST 250ms between reads!
    delay(1000);
 }

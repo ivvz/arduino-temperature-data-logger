@@ -2,12 +2,23 @@
 #include "max6675.h"
 
 const int chipSelect = 4;
+int boton_crear_archivo = 2;
+int boton_cerrar_archivo = 3;
+int numero_de_archivo = 4;
+
+int thermoDO = 7;
+int thermoCS = 5;
+int thermoCLK = 6;
+
+MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
 
 void setup() {
 
   // Open serial communications and wait for port to open:
 
   Serial.begin(9600);
+  pinMode(boton_crear_archivo, INPUT_PULLUP);
+  pinMode(boton_cerrar_archivo, INPUT_PULLUP);
 
   // wait for Serial Monitor to connect. Needed for native USB port boards only:
 
@@ -32,29 +43,26 @@ void setup() {
   }
 
   Serial.println("initialization done.");
+
+
 }
 
-void loop() {
+//void loop() {
+
+ // String dataString = "";
+  //String file_name = "file" + String(numero_de_archivo) + ".csv";
+
+ void loop() {
 
   // make a string for assembling the data to log:
 
   String dataString = "";
 
-  // read three sensors and append to the string:
 
-  for (int analogPin = 0; analogPin < 3; analogPin++) {
 
-    int sensor = analogRead(analogPin);
 
-    dataString += String(sensor);
+    dataString += thermocouple.readCelsius();
 
-    if (analogPin < 2) {
-
-      dataString += ",";
-
-    }
-
-  }
 
   // open the file. note that only one file can be open at a time,
 
@@ -84,3 +92,10 @@ void loop() {
 
   }
 }
+File crearArchivo(String nombre){
+  File dataFile = SD.open(nombre, FILE_WRITE);
+  }
+
+//File cerrarArchivo(String nombre){
+ // File nombre.close();
+//}
