@@ -42,12 +42,12 @@ void setup() {
 
   }
 
+
   Serial.println("initialization done.");
 
 
 }
 
-//void loop() {
 
  // String dataString = "";
   //String file_name = "file" + String(numero_de_archivo) + ".csv";
@@ -57,18 +57,15 @@ void setup() {
   // make a string for assembling the data to log:
 
   String dataString = "";
-
-
-
-
-    dataString += thermocouple.readCelsius();
+  
+  dataString += thermocouple.readCelsius();
 
 
   // open the file. note that only one file can be open at a time,
 
   // so you have to close this one before opening another.
 
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  File dataFile = SD.open("hornoxx.csv", FILE_WRITE);
 
   // if the file is available, write to it:
 
@@ -81,6 +78,7 @@ void setup() {
     // print to the serial port too:
 
     Serial.println(dataString);
+    delay(1000);
 
   }
 
