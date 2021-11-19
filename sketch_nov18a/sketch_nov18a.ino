@@ -9,7 +9,7 @@ Adafruit_SSD1306 display(OLED_RESET);
 #error("Altura incorrecta, cambie en la libreria de Adafruit_SSD1306.h!");
 #endif
 
-void show_temp() {
+void read_temp() {
 display.clearDisplay();
 display.setTextSize(2);
 display.setTextColor(WHITE);
@@ -28,7 +28,7 @@ display.display();
 delay(5000);
 }
 void loop() {
-show_temp();
+read_temp();
 display.clearDisplay();
 display.setTextSize(3);
 display.setCursor(0,10);
