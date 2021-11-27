@@ -1,18 +1,16 @@
-// this example is public domain. enjoy!
-// https://learn.adafruit.com/thermocouple/
-
 #include "max6675.h"
 
-int thermoDO = 4;
-int thermoCS = 5;
-int thermoCLK = 6;
+
+int thermoDO = 7;
+int thermoCS = 6;
+int thermoCLK = 5;
 
 int buttonCreate = 2;
 int buttonClose = 3;
-int led =7;
+int led = 4;
 
 unsigned long termocoupleTime;
-unsigned long readTime = 500;
+unsigned long readTime = 1000;
 
 float temperature;
 
@@ -32,7 +30,6 @@ void setup() {
   pinMode(led, OUTPUT);
   
 
-
   lastStateCreateButton = digitalRead(buttonCreate);
   lastStateCloseButton = digitalRead(buttonClose);
   
@@ -43,21 +40,13 @@ void setup() {
 }
 
 void loop() {
-
+  float temp_1;
+  
   if(millis() - termocoupleTime >= readTime){
     continuousTermocoupleRead();  
     }
 
-  int buttonState = digitalRead(buttonCreate);
-  
-  if(digitalRead(buttonState == LOW)){
-   //Serial.println("no apretaste el boton");
-   digitalWrite(led, LOW);
-  } else{
-    digitalWrite(7,HIGH);
-    Serial.println("creatting file");
-    delay(1000);
-  }
+   temp_1 = thermocouple.readCelsius();
 
 
 
@@ -67,12 +56,10 @@ void continuousTermocoupleRead(){
    Serial.print("C = "); 
    readTemperature();
    //delay(250);
-   termocoupleTime = millis();
-   
+   termocoupleTime = millis();   
 }
 
 void readTemperature(){
   temperature = thermocouple.readCelsius();
   Serial.println(temperature);
-  
 }
