@@ -13,14 +13,16 @@ void read_temp() {
 display.clearDisplay();
 display.setTextSize(2);
 display.setTextColor(WHITE);
-display.setCursor(0,10);
-display.println("termopar 1");
-display.setCursor(0,32);
+display.setCursor(10,10);
+display.println("tp 1");
+display.setCursor(70,10);
 display.println("xx C");
 display.display();
 delay(2000);
 }
 void setup() {
+Serial.begin(9600);
+Serial.println("probando arduino");
 display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 display.clearDisplay();
 //display.drawBitmap(0,0,logo,128,64,1);
@@ -31,7 +33,7 @@ void loop() {
 read_temp();
 display.clearDisplay();
 display.setTextSize(3);
-display.setCursor(0,10);
+display.setCursor(15,20);
 display.println("Almexa");
 display.display();
 delay(2000);
