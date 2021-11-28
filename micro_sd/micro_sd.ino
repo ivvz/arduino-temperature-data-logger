@@ -4,6 +4,10 @@
 
 int boton_inicio = 2;
 int boton_cierre = 3;
+int estado_anterior_boton_inicio;
+int estado_anterior_boton_final;
+unsigned long tiempo_lectura = 2000; // intervalo de lectura general (sin ejecutar funcion de registro de datos)
+unsigned long tiempo_sin_registro;
 
 const int chipSelect = 10;
 
@@ -17,44 +21,50 @@ void setup() {
   Serial.begin(9600);
   delay(500);
 
+  //define los botones
   pinMode(boton_inicio, INPUT_PULLUP);
   pinMode(boton_cierre, INPUT_PULLUP);
-
   digitalWrite(boton_inicio, HIGH);
   digitalWrite(boton_inicio, HIGH);
+  estado_anterior_boton_inicio = digitalRead(boton_inicio);
+  estado_anterior_boton_final = digitalRead(boton_cierre);
 
-  
-  
+  //checa si la sd funciona correctamente
   checkSD();
 }  
 
 void loop() {
-  String dataString;
-  String nombre = "hornos5"; 
 
-  File archivo = createFile(nombre);
-  
-  dataString = createString();
-  writeData(nombre,dataString);
+  if(millis() - tiempo_sin_registro>= tiempo_lectura){
+     Serial.println("Temperatura = " + String(thermocouple.readCelsius()) + " C");
+     tiempo_sin_registro = millis();  
+    }
+    
+  int estado_actual_boton_inicio = digitalRead(boton_inicio);
+  int estado_actual_boton_final = digitalRead(boton_cierre);
 
-  //archivo.println(dataString);
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
+
+  if (estado_actual_boton_inicio == LOW && estado_anterior_boton_inicio == HIGH ) {
+      String dataString;
+      String nombre;
+      nombre =  String(millis()); 
+      File archivo = createFile(nombre);
+      
+    while(estado_actual_boton_final == HIGH){
+      Serial.println("Escribiendo datos");
+      dataString = createString();
+      writeData(nombre,dataString);
+      estado_actual_boton_final = digitalRead(boton_cierre);
+      }
+  Serial.println("cerrando archivo....");
+  Serial.println("se cerro el archivo.......\nvolviendo a la lectura");
   
-//  File dataFile = SD.open("hornos3.csv", FILE_WRITE);
-//  if (dataFile) {
-//    dataFile.println(dataString);
-//    dataFile.close();
-//    // print to the serial port too:
-//    Serial.println(dataString);
-//    delay(5000);
-//  }
-//  // if the file isn't open, pop up an error:
-//  else {
-//    Serial.println("error opening datalog.txt");
-//  }
-//}
-}
+  delay(2000);
+  }
+} 
+  
+
+ 
 String createString(){
   // make a string for assembling the data to log:
   String dataString = "";
